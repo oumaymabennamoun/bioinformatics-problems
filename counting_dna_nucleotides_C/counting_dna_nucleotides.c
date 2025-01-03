@@ -8,16 +8,30 @@ Return: Four integers (separated by spaces) counting the respective number of ti
 
 /*
 How I solved:
-1. Created a char array with 1001 slots for the max number of nucleotides and terminating char.
-2. 
+1. Created a char array with 1001 slots for the max number of nt and terminating char.
+2. Read the DNA string from the provided dataset into the array.
+3. Iterated over the newly stored symbols for nt count.
 */
 
-void count_dna_nucleotides(char *s) {
+void read(char *s) {
+    FILE *fptr;
+    fptr = fopen("rosalind_dna.txt", "r");
+
+    if (fptr == NULL) {
+        perror("Error opening rosalind_dna.txt.\n");
+        exit(1);
+    }
+
+    fscan(fptr, "%s", s);
+    fclose(fptr);
+}
+
+void count(char *s) {
+    int i;
     int A_counter = 0, C_counter = 0, G_counter = 0, T_counter = 0;
 
-    int i;
     for (i = 0; s[i] != '\0'; i++) {
-        switch (s[i]) {
+        switch(s[i]) {
             case 'A':
                 A_counter++;
                 break;
@@ -31,7 +45,7 @@ void count_dna_nucleotides(char *s) {
                 T_counter++;
                 break;
             default:
-                printf("Dataset includes a character outside of the nucleotides A, C, G, and T");
+                fprintf(stderr, "Dataset includes a character outside of the nucleotides A, C, G, and T");
                 exit(1);
         }
     }
@@ -39,26 +53,11 @@ void count_dna_nucleotides(char *s) {
     printf("%d %d %d %d\n", A_counter, C_counter, G_counter, T_counter);
 }
 
-void read_dataset(char *s) {
-    FILE *fptr;
-
-    fptr = fopen("rosalind_dna.txt", "r");
-
-    if (fptr == NULL) {
-        printf("Error opening rosalind_dna.txt.\n");
-        exit(1);
-    }
-
-    fscanf(fptr, "%s", s);
-
-    fclose(fptr);
-}
-
 int main() {
     char s[1001];
 
-    read_dataset(s);
-    count_dna_nucleotides(s);
+    read(s);
+    count(s);
 
     return 0;
 }
